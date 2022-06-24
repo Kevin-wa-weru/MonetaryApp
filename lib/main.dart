@@ -9,6 +9,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mpesa_flutter_plugin/mpesa_flutter_plugin.dart';
 
 // FOREVER RELYING ON GOD
+
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
