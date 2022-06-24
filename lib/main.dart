@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mpesa_flutter_plugin/mpesa_flutter_plugin.dart';
 
+// FOREVER RELYING ON GOD
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
@@ -20,8 +21,8 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-     MpesaFlutterPlugin.setConsumerKey(kConsumerKey);
-  MpesaFlutterPlugin.setConsumerSecret(kConsumerSecret);
+    MpesaFlutterPlugin.setConsumerKey(kConsumerKey);
+    MpesaFlutterPlugin.setConsumerSecret(kConsumerSecret);
     Firebase.initializeApp();
     final box = Boxes.getAccount();
     final account = box.values.toList().cast<UserReg>();
