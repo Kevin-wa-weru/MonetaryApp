@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "eslint-config-google": "^0.14.0"
+  },
+  "dependencies": {
+    "moment": "^2.29.3",
+    "node-fetch": "^3.2.6"
+  }
+}
