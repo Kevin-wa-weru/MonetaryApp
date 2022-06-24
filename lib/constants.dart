@@ -19,5 +19,6 @@ const primaryOne = Color(0xFF5BD271);
 const primaryTwo = Color(0xFF5BD2A8);
 const primaryThree = Color(0xFF5BD2AC);
 
-const passkey = "";
-const cloudfunctionCallback = "";
+const passkey =
+    "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
+const cloudfunctionCallback = "us-central1-billapp-8e781.cloudfunctions.net";
