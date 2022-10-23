@@ -1,2 +1,2 @@
-String kConsumerKey = "cVRuylvl1jsnMU4B5mHeUPrJ6qG9tcMC";
-String kConsumerSecret = "LD7pQDcgKGk2WztG";
+String kConsumerKey = "5qExDrw59NGkqLLGqBEfeVFeuDS4Gzt6";
+String kConsumerSecret = "DSpy7p6Chug9kN0j";

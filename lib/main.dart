@@ -11,6 +11,8 @@ import 'package:mpesa_flutter_plugin/mpesa_flutter_plugin.dart';
 // FOREVER RELYING ON GOD
 
 Future main() async {
+  MpesaFlutterPlugin.setConsumerKey(kConsumerKey);
+  MpesaFlutterPlugin.setConsumerSecret(kConsumerSecret);
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(UserRegAdapter());
@@ -22,8 +24,6 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    MpesaFlutterPlugin.setConsumerKey(kConsumerKey);
-    MpesaFlutterPlugin.setConsumerSecret(kConsumerSecret);
     Firebase.initializeApp();
     final box = Boxes.getAccount();
     final account = box.values.toList().cast<UserReg>();

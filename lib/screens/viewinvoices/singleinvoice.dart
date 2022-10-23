@@ -57,47 +57,48 @@ class _SingleInvoicesState extends State<SingleInvoices>
     }
   }
 
-  Future<void> startPaymentProcessing(
-      {required String phone, required double amount}) async {
-    setState(() {
-      appisLoading = true;
-    });
+  Future<void> startCheckout(
+      {required String userPhone, required double amount}) async {
+    //Preferably expect 'dynamic', response type varies a lot!
     dynamic transactionInitialisation;
+    //Better wrap in a try-catch for lots of reasons.
     try {
+      //Run it
       transactionInitialisation =
           await MpesaFlutterPlugin.initializeMpesaSTKPush(
               businessShortCode: "174379",
               transactionType: TransactionType.CustomerPayBillOnline,
               amount: amount,
-              partyA: phone,
+              partyA: userPhone,
               partyB: "174379",
               callBackURL: Uri(
-                  scheme: "https",
-                  host: cloudfunctionCallback,
-                  path: "paymentCallback"),
+                  scheme: "https", host: "1234.1234.co.ke", path: "/1234.php"),
               accountReference: "Moneytari",
-              phoneNumber: phone,
-              transactionDesc: "demo",
+              phoneNumber: userPhone,
               baseUri: Uri(scheme: "https", host: "sandbox.safaricom.co.ke"),
-              passKey: cloudfunctionCallback);
-      var result = transactionInitialisation as Map<String, dynamic>;
+              transactionDesc: "purchase",
+              passKey: passkey);
 
-      if (result.keys.contains("ResponseCode")) {
-        String mResponseCode = result["ResponseCode"];
-        // ignore: avoid_print, prefer_interpolation_to_compose_strings
-        print("Result Code:" + mResponseCode);
-        if (mResponseCode == '0') {
-          setState(() {
-            appisLoading = false;
-          });
-        }
-      }
+      // ignore: avoid_print
+      print("TRANSACTION RESULT: $transactionInitialisation");
+
+      //You can check sample parsing here -> https://github.com/keronei/Mobile-Demos/blob/mpesa-flutter-client-app/lib/main.dart
+
+      /*Update your db with the init data received from initialization response,
+      * Remaining bit will be sent via callback url*/
+      return transactionInitialisation;
     } catch (e) {
-      // ignore: prefer_interpolation_to_compose_strings, avoid_print
-      print('Exception' + e.toString());
-      setState(() {
-        appisLoading = false;
-      });
+      //For now, console might be useful
+      // ignore: avoid_print
+      print("CAUGHT EXCEPTION: $e");
+
+      /*
+      Other 'throws':
+      1. Amount being less than 1.0
+      2. Consumer Secret/Key not set
+      3. Phone number is less than 9 characters
+      4. Phone number not in international format(should start with 254 for KE)
+       */
     }
   }
 
@@ -282,9 +283,12 @@ class _SingleInvoicesState extends State<SingleInvoices>
                           textColor: Colors.white,
                           fontSize: 16.0);
                     } else {
-                      startPaymentProcessing(
-                          phone: phone.toString(), amount: amount!.toDouble());
+                      // startPaymentProcessing(
+                      //     phone: phone.toString(), amount: amount!.toDouble());
 
+                      startCheckout(
+                          userPhone: phone.toString(),
+                          amount: amount!.toDouble());
                       setState(() {
                         showBillingContainer = true;
                       });
