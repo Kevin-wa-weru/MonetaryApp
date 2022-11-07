@@ -73,14 +73,14 @@ class _SingleInvoicesState extends State<SingleInvoices>
               partyB: "174379",
               callBackURL: Uri(
                   scheme: "https", host: "1234.1234.co.ke", path: "/1234.php"),
-              accountReference: "Moneytari",
+              accountReference: "shoe",
               phoneNumber: userPhone,
               baseUri: Uri(scheme: "https", host: "sandbox.safaricom.co.ke"),
               transactionDesc: "purchase",
               passKey: passkey);
 
       // ignore: avoid_print
-      print("TRANSACTION RESULT: $transactionInitialisation");
+      print("TRANSACTION RESULT: " + transactionInitialisation.toString());
 
       //You can check sample parsing here -> https://github.com/keronei/Mobile-Demos/blob/mpesa-flutter-client-app/lib/main.dart
 
@@ -89,8 +89,7 @@ class _SingleInvoicesState extends State<SingleInvoices>
       return transactionInitialisation;
     } catch (e) {
       //For now, console might be useful
-      // ignore: avoid_print
-      print("CAUGHT EXCEPTION: $e");
+      print("CAUGHT EXCEPTION: " + e.toString());
 
       /*
       Other 'throws':
@@ -99,6 +98,55 @@ class _SingleInvoicesState extends State<SingleInvoices>
       3. Phone number is less than 9 characters
       4. Phone number not in international format(should start with 254 for KE)
        */
+    }
+  }
+
+  Future<void> startPaymentProcessing(
+      {required String phone, required double amount}) async {
+    print('Started');
+    setState(() {
+      appisLoading = true;
+    });
+    dynamic transactionInitialisation;
+    try {
+      transactionInitialisation =
+          await MpesaFlutterPlugin.initializeMpesaSTKPush(
+              businessShortCode: "174379",
+              transactionType: TransactionType.CustomerPayBillOnline,
+              amount: amount,
+              partyA: phone,
+              partyB: "174379",
+              callBackURL: Uri(
+                  scheme: "https",
+                  host: cloudfunctionCallback,
+                  path: "paymentCallback"),
+              accountReference: "Moneytari",
+              phoneNumber: phone,
+              transactionDesc: "demo",
+              baseUri: Uri(scheme: "https", host: "sandbox.safaricom.co.ke"),
+              passKey: passkey);
+      var result = transactionInitialisation as Map<String, dynamic>;
+
+      print('REsultsssssssssssssssss:::$result');
+
+      if (result.keys.contains("ResponseCode")) {
+        String mResponseCode = result["ResponseCode"];
+        // ignore: avoid_print, prefer_interpolation_to_compose_strings
+        print("Result Code:" + mResponseCode);
+        if (mResponseCode == '0') {
+          setState(() {
+            appisLoading = false;
+          });
+        }
+      }
+    } catch (e) {
+      print('Erorr was founddddddddddddddddddddddddddddddd');
+      // ignore: prefer_interpolation_to_compose_strings, avoid_prin
+      // t
+      print('Exception' + e.toString());
+      setState(() {
+        appisLoading = false;
+      });
     }
   }
 
